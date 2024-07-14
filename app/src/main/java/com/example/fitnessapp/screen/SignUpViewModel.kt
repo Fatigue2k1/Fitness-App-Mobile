@@ -1,6 +1,8 @@
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fitnessapp.database.AppDatabase
 import com.example.fitnessapp.database.User
@@ -10,24 +12,19 @@ import kotlinx.coroutines.launch
 class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
     private val userDao = AppDatabase.getDatabase(application).userDao()
+    private val _userCreated = MutableLiveData<Boolean>()
+    val userCreated: LiveData<Boolean> get() = _userCreated
 
     fun signUp(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // Check if user with this email already exists
-                val existingUser = userDao.getUserByEmail(email)
-                if (existingUser != null) {
-                    Log.d("SignUpViewModel", "User already exists")
-                    // Handle user already exists scenario
-                } else {
-                    // Insert new user into the database
-                    userDao.insertUser(User(email = email, password = password))
-                    Log.d("SignUpViewModel", "User inserted into database")
-                    // Handle successful sign-up (e.g., navigate to the login screen)
-                }
+                // ... (existing code)
+
+                // Handle successful sign-up
+                _userCreated.postValue(true)
             } catch (e: Exception) {
-                Log.e("SignUpViewModel", "Error occurred during sign-up", e)
-                // Handle error scenario
+                // ...
+                _userCreated.postValue(false) // Indicate failure
             }
         }
     }

@@ -7,6 +7,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -22,6 +23,7 @@ fun SignUpScreen(navController: NavHostController) {
     val confirmPassword = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
     val viewModel: SignUpViewModel = viewModel()
+    val userCreated by viewModel.userCreated.observeAsState(false)
 
     Column(
         modifier = Modifier
@@ -62,6 +64,14 @@ fun SignUpScreen(navController: NavHostController) {
             }
         }) {
             Text("Sign Up")
+        }
+        if (userCreated) {
+            Text("User created successfully!")
+            Button(onClick = {
+                navController.navigate("login")
+            }) {
+                Text("Sign In")
+            }
         }
     }
 }

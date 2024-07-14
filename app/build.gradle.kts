@@ -76,6 +76,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.5.2")
     implementation(libs.androidx.navigation.runtime.ktx)
     implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.runtime.livedata)
     kapt("androidx.room:room-compiler:2.5.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
