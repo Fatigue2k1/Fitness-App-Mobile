@@ -1,32 +1,33 @@
-package com.example.fitnessapp.screen
-
+import android.app.Application
 import android.util.Log
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.fitnessapp.API
-import com.example.fitnessapp.SignUpRequest
+import com.example.fitnessapp.database.AppDatabase
+import com.example.fitnessapp.database.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val userDao = AppDatabase.getDatabase(application).userDao()
+
     fun signUp(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("SignUpViewModel", "signUp: Making network request")
             try {
-                val response = API.service.signUp(SignUpRequest(email, password))
-                withContext(Dispatchers.Main) {
-                    if (response.success) {
-                        Log.d("SignUpViewModel", "signUp: Successful sign-up")
-                        // Handle successful sign-up (e.g., navigate to the login screen)
-                    } else {
-                        Log.d("SignUpViewModel", "signUp: Unsuccessful sign-up")
-                        // Handle unsuccessful sign-up (e.g., show error message)
-                    }
+                // Check if user with this email already exists
+                val existingUser = userDao.getUserByEmail(email)
+                if (existingUser != null) {
+                    Log.d("SignUpViewModel", "User already exists")
+                    // Handle user already exists scenario
+                } else {
+                    // Insert new user into the database
+                    userDao.insertUser(User(email = email, password = password))
+                    Log.d("SignUpViewModel", "User inserted into database")
+                    // Handle successful sign-up (e.g., navigate to the login screen)
                 }
             } catch (e: Exception) {
-                Log.e("SignUpViewModel", "signUp: Error occurred", e)
-                // Handle network or other errors
+                Log.e("SignUpViewModel", "Error occurred during sign-up", e)
+                // Handle error scenario
             }
         }
     }

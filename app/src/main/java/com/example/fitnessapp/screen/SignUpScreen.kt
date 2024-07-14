@@ -1,5 +1,6 @@
 package com.example.fitnessapp.screen
 
+import SignUpViewModel
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -50,15 +51,14 @@ fun SignUpScreen(navController: NavHostController) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = {
-            Log.d("SignUpScreen", "Sign Up button clicked")
             if (password.value == confirmPassword.value) {
                 scope.launch {
-                    Log.d("SignUpScreen", "Calling viewModel.signUp")
                     viewModel.signUp(email.value, password.value)
                 }
             } else {
+                // Display error message to the user
+                // e.g., Snackbar, Toast, or an error text field
                 Log.d("SignUpScreen", "Passwords do not match")
-                // Handle password mismatch
             }
         }) {
             Text("Sign Up")
