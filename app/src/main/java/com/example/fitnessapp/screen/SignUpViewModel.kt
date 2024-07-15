@@ -15,16 +15,22 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
     private val _userCreated = MutableLiveData<Boolean>()
     val userCreated: LiveData<Boolean> get() = _userCreated
 
+    private val _userExists = MutableLiveData<Boolean>(false)
+    val userExists: LiveData<Boolean> get() = _userExists
+
     fun signUp(email: String, password: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                // ... (existing code)
-
-                // Handle successful sign-up
-                _userCreated.postValue(true)
+                val existingUser = userDao.getUserByEmail(email)
+                if (existingUser != null) {
+                    _userExists.postValue(true)
+                } else {
+                    // Insert new user into the database
+                    userDao.insertUser(User(email = email, password = password))
+                    _userCreated.postValue(true)
+                }
             } catch (e: Exception) {
                 // ...
-                _userCreated.postValue(false) // Indicate failure
             }
         }
     }
