@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,21 +36,48 @@ fun SignUpScreen(navController: NavHostController) {
     val userCreated by viewModel.userCreated.observeAsState(false)
     val userExists by viewModel.userExists.observeAsState(false)
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black) // Background color for the whole screen
+    ) {
         Image(
-            painter = painterResource(id = R.drawable.background), // replace with your actual background image resource
+            painter = painterResource(id = R.drawable.background), // Replace with your actual background image resource
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
+
+        // Top buttons for Sign Up and Sign In
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.Top
+        ) {
+            Button(
+                onClick = { /* Navigate to Sign Up screen */ },
+                modifier = Modifier.padding(end = 8.dp)
+            ) {
+                Text("Sign Up", color = Color.White)
+            }
+            Button(
+                onClick = { navController.navigate("login") },
+                modifier = Modifier
+            ) {
+                Text("Sign In", color = Color.White)
+            }
+        }
+
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .align(Alignment.TopCenter) // Align to the top center of the screen
         ) {
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(300.dp)) // Spacer height to move content further down
+
             Text(
                 text = "HELLO ROOKIES,",
                 color = Color.White,
@@ -57,7 +85,22 @@ fun SignUpScreen(navController: NavHostController) {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.weight(1f)) // Push the following content to the bottom
+            Text(
+                text = "ENTER YOUR INFORMATION BELOW OR LOGIN WITH ANOTHER ACCOUNT",
+                color = Color.White,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth()
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .align(Alignment.Center)
+                .offset(y = 100.dp) // Adjust vertical offset to center the input box
+        ) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -69,6 +112,7 @@ fun SignUpScreen(navController: NavHostController) {
                         value = email.value,
                         onValueChange = { email.value = it },
                         label = { Text("Email", color = Color.White) },
+                        textStyle = TextStyle(color = Color.White),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -77,6 +121,7 @@ fun SignUpScreen(navController: NavHostController) {
                         onValueChange = { password.value = it },
                         label = { Text("Password", color = Color.White) },
                         visualTransformation = PasswordVisualTransformation(),
+                        textStyle = TextStyle(color = Color.White),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -85,6 +130,7 @@ fun SignUpScreen(navController: NavHostController) {
                         onValueChange = { confirmPassword.value = it },
                         label = { Text("Confirm Password", color = Color.White) },
                         visualTransformation = PasswordVisualTransformation(),
+                        textStyle = TextStyle(color = Color.White),
                         modifier = Modifier.fillMaxWidth()
                     )
                     Spacer(modifier = Modifier.height(16.dp))
@@ -107,10 +153,8 @@ fun SignUpScreen(navController: NavHostController) {
                     Spacer(modifier = Modifier.height(8.dp))
                     if (userCreated) {
                         Text("User created successfully!", color = Color.White)
-                        Button(onClick = {
+                        LaunchedEffect(userCreated) {
                             navController.navigate("login")
-                        }) {
-                            Text("Sign In")
                         }
                     }
                     if (userExists) {
@@ -118,7 +162,6 @@ fun SignUpScreen(navController: NavHostController) {
                     }
                 }
             }
-            Spacer(modifier = Modifier.weight(1f)) // Add another spacer to ensure bottom alignment
         }
     }
 }
