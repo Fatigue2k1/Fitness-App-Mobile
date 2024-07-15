@@ -4,6 +4,7 @@ import SignUpViewModel
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
@@ -39,16 +40,15 @@ fun SignUpScreen(navController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black) // Background color for the whole screen
+            .background(Color.Black)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.background), // Replace with your actual background image resource
+            painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
 
-        // Top buttons for Sign Up and Sign In
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,27 +56,28 @@ fun SignUpScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
         ) {
-            Button(
-                onClick = { /* Navigate to Sign Up screen */ },
-                modifier = Modifier.padding(end = 8.dp)
-            ) {
-                Text("Sign Up", color = Color.White)
-            }
-            Button(
-                onClick = { navController.navigate("login") },
+            Text(
+                text = "Sign Up",
+                color = Color.White,
                 modifier = Modifier
-            ) {
-                Text("Sign In", color = Color.White)
-            }
+                    .padding(end = 8.dp)
+                    .clickable { /* Navigate to Sign Up screen */ }
+            )
+            Text(
+                text = "Sign In",
+                color = Color.White,
+                modifier = Modifier
+                    .clickable { navController.navigate("login") }
+            )
         }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .align(Alignment.TopCenter) // Align to the top center of the screen
+                .align(Alignment.TopCenter)
         ) {
-            Spacer(modifier = Modifier.height(300.dp)) // Spacer height to move content further down
+            Spacer(modifier = Modifier.height(300.dp))
 
             Text(
                 text = "HELLO ROOKIES,",
@@ -99,7 +100,7 @@ fun SignUpScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
-                .offset(y = 100.dp) // Adjust vertical offset to center the input box
+                .offset(y = 100.dp)
         ) {
             Box(
                 modifier = Modifier
