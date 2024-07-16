@@ -1,12 +1,10 @@
 package com.example.fitnessapp.screen.signup_screen
 
-import com.example.fitnessapp.screen.signup_screen.SignUpViewModel
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text

@@ -45,4 +45,7 @@ interface UserDao {
 
     @Query("SELECT * FROM user_table WHERE email = :userEmail")
     fun getUserByEmail(userEmail: String): User?
+
+    @Query("UPDATE user_table SET password = :newPassword WHERE email = :email")
+    fun updatePassword(email: String, newPassword: String)
 }
