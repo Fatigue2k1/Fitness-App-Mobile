@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fitnessapp.database.AppDatabase
-import com.example.fitnessapp.database.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -19,12 +18,12 @@ class ForgotPasswordViewModel(application: Application) : AndroidViewModel(appli
     private val _resetPasswordError = MutableLiveData<String>()
     val resetPasswordError: LiveData<String> get() = _resetPasswordError
 
-    fun resetPassword(email: String) {
+    fun resetPassword(email: String, newPassword: String) {
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val user = userDao.getUserByEmail(email)
                 if (user != null) {
-                    // Normally, you would send a reset password email or implement your reset logic here
+                    userDao.updatePassword(email, newPassword)
                     _passwordReset.postValue(true)
                 } else {
                     _resetPasswordError.postValue("User not found")
