@@ -1,3 +1,5 @@
+package com.example.fitnessapp.screen.signup_screen
+
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel

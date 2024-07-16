@@ -1,16 +1,19 @@
-package com.example.fitnessapp.screen
+package com.example.fitnessapp.screen.login_screen
 
-import SignUpViewModel
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,32 +26,30 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.launch
 import com.example.fitnessapp.R
+import kotlinx.coroutines.launch
 
 @Composable
-fun SignUpScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController) {
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
-    val confirmPassword = remember { mutableStateOf("") }
     val scope = rememberCoroutineScope()
-    val viewModel: SignUpViewModel = viewModel()
-    val userCreated by viewModel.userCreated.observeAsState(false)
-    val userExists by viewModel.userExists.observeAsState(false)
+    val viewModel: LoginViewModel = viewModel()
+    val loginSuccessful by viewModel.loginSuccessful.observeAsState(false)
+    val loginError by viewModel.loginError.observeAsState("")
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black) // Background color for the whole screen
+            .background(Color.Black)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.background), // Replace with your actual background image resource
+            painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
 
-        // Top buttons for Sign Up and Sign In
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -56,37 +57,38 @@ fun SignUpScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.Top
         ) {
-            Button(
-                onClick = { /* Navigate to Sign Up screen */ },
-                modifier = Modifier.padding(end = 8.dp)
-            ) {
-                Text("Sign Up", color = Color.White)
-            }
-            Button(
-                onClick = { navController.navigate("login") },
+            Text(
+                text = "Sign Up",
+                color = Color.White,
                 modifier = Modifier
-            ) {
-                Text("Sign In", color = Color.White)
-            }
+                    .padding(end = 8.dp)
+                    .clickable { navController.navigate("signup") }
+            )
+            Text(
+                text = "Sign In",
+                color = Color.White,
+                modifier = Modifier
+                    .clickable { /* Navigate to Sign In screen */ }
+            )
         }
 
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
-                .align(Alignment.TopCenter) // Align to the top center of the screen
+                .align(Alignment.TopCenter)
         ) {
-            Spacer(modifier = Modifier.height(300.dp)) // Spacer height to move content further down
+            Spacer(modifier = Modifier.height(300.dp))
 
             Text(
-                text = "HELLO ROOKIES,",
+                text = "WELCOME BACK,",
                 color = Color.White,
                 fontSize = 24.sp,
                 textAlign = TextAlign.Center,
                 modifier = Modifier.fillMaxWidth()
             )
             Text(
-                text = "ENTER YOUR INFORMATION BELOW OR LOGIN WITH ANOTHER ACCOUNT",
+                text = "ENTER YOUR CREDENTIALS BELOW OR SIGN UP FOR A NEW ACCOUNT",
                 color = Color.White,
                 fontSize = 16.sp,
                 textAlign = TextAlign.Center,
@@ -99,7 +101,7 @@ fun SignUpScreen(navController: NavHostController) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .align(Alignment.Center)
-                .offset(y = 100.dp) // Adjust vertical offset to center the input box
+                .offset(y = 100.dp)
         ) {
             Box(
                 modifier = Modifier
@@ -124,41 +126,28 @@ fun SignUpScreen(navController: NavHostController) {
                         textStyle = TextStyle(color = Color.White),
                         modifier = Modifier.fillMaxWidth()
                     )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    OutlinedTextField(
-                        value = confirmPassword.value,
-                        onValueChange = { confirmPassword.value = it },
-                        label = { Text("Confirm Password", color = Color.White) },
-                        visualTransformation = PasswordVisualTransformation(),
-                        textStyle = TextStyle(color = Color.White),
-                        modifier = Modifier.fillMaxWidth()
-                    )
                     Spacer(modifier = Modifier.height(16.dp))
                     Button(
                         onClick = {
-                            if (password.value == confirmPassword.value) {
-                                scope.launch {
-                                    viewModel.signUp(email.value, password.value)
-                                }
-                            } else {
-                                Log.d("SignUpScreen", "Passwords do not match")
+                            scope.launch {
+                                viewModel.login(email.value, password.value)
                             }
                         },
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(Color.Yellow)
                     ) {
-                        Text("Sign Up", color = Color.Black)
+                        Text("Sign In", color = Color.Black)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (userCreated) {
-                        Text("User created successfully!", color = Color.White)
-                        LaunchedEffect(userCreated) {
-                            navController.navigate("login")
+                    if (loginSuccessful) {
+                        Text("Login successful!", color = Color.White)
+                        LaunchedEffect(loginSuccessful) {
+                            // Navigate to the main screen or dashboard
                         }
                     }
-                    if (userExists) {
-                        Text("User already exists", color = Color.White)
+                    if (loginError.isNotEmpty()) {
+                        Text(loginError, color = Color.White)
                     }
                 }
             }
