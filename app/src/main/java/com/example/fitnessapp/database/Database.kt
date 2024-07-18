@@ -3,6 +3,7 @@ package com.example.fitnessapp.database
 import android.content.Context
 import androidx.room.Dao
 import androidx.room.Database
+import androidx.room.Delete
 import androidx.room.Entity
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -66,4 +67,7 @@ interface WorkoutDao {
 
     @Query("SELECT * FROM workout_table")
     fun getAllWorkouts(): List<Workout>
+
+    @Delete
+    fun deleteWorkout(workout: Workout)
 }

@@ -43,4 +43,11 @@ class WorkoutRoutineViewModel(application: Application) : AndroidViewModel(appli
             _workouts.postValue(workoutDao.getAllWorkouts())
         }
     }
+
+    fun deleteWorkout(workout: Workout) {
+        viewModelScope.launch(Dispatchers.IO) {
+            workoutDao.deleteWorkout(workout)
+            _workouts.postValue(workoutDao.getAllWorkouts())
+        }
+    }
 }

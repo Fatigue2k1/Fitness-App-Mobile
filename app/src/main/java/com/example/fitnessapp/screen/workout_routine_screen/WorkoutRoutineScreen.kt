@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -29,7 +30,10 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(workouts) { workout ->
-                WorkoutItem(workout)
+                WorkoutItem(workout) {
+                    // Delete action callback
+                    viewModel.deleteWorkout(workout)
+                }
             }
         }
         Box(
@@ -58,7 +62,7 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
 }
 
 @Composable
-fun WorkoutItem(workout: Workout) {
+fun WorkoutItem(workout: Workout, onDelete: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -71,9 +75,19 @@ fun WorkoutItem(workout: Workout) {
             .padding(16.dp)) {
             Text(text = workout.name, style = MaterialTheme.typography.titleMedium)
             Text(text = workout.description, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(
+                horizontalArrangement = Arrangement.End,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = onDelete) {
+                    Icon(Icons.Default.Delete, contentDescription = "Delete Workout")
+                }
+            }
         }
     }
 }
+
 
 @Composable
 fun AddWorkoutDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
