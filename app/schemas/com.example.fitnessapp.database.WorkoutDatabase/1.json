@@ -2,34 +2,8 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "1fadd6da9fd927e4dcc711f21a6381e7",
+    "identityHash": "22db944db50a02f53fab9896aeadd534",
     "entities": [
-      {
-        "tableName": "user_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`email` TEXT NOT NULL, `password` TEXT NOT NULL, PRIMARY KEY(`email`))",
-        "fields": [
-          {
-            "fieldPath": "email",
-            "columnName": "email",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "password",
-            "columnName": "password",
-            "affinity": "TEXT",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "email"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
-      },
       {
         "tableName": "workout_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `description` TEXT NOT NULL)",
@@ -66,7 +40,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '1fadd6da9fd927e4dcc711f21a6381e7')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '22db944db50a02f53fab9896aeadd534')"
     ]
   }
 }

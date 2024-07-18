@@ -1,7 +1,6 @@
 package com.example.fitnessapp
 
 import androidx.compose.runtime.Composable
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -11,6 +10,7 @@ import com.example.fitnessapp.screen.forgot_password_screen.ForgotPasswordScreen
 import com.example.fitnessapp.screen.login_screen.LoginScreen
 import com.example.fitnessapp.screen.signup_screen.SignUpScreen
 import com.example.fitnessapp.screen.welcome_screen.WelcomeScreen
+import com.example.fitnessapp.screen.workout_routine_screen.WorkoutRoutineScreen
 
 @Composable
 fun Navigation() {
@@ -21,5 +21,6 @@ fun Navigation() {
         composable("login") { LoginScreen(navController) }
         composable("change_password") { ChangePasswordScreen(navController) }
         composable("forgot_password") { ForgotPasswordScreen(navController) }
+        composable("workout_routine") { WorkoutRoutineScreen(navController) }
     }
 }

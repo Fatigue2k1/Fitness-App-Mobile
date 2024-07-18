@@ -133,8 +133,11 @@ fun LoginScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(8.dp))
                 if (loginSuccessful) {
                     Text("Login successful", color = Color.White)
-                    // Navigate to another screen or perform desired action after successful login
-                    // e.g., navController.navigate("home_screen")
+                    LaunchedEffect(Unit) {
+                        navController.navigate("workout_routine") {
+                            popUpTo("login") { inclusive = true }
+                        }
+                    }
                 }
                 if (loginError.isNotEmpty()) {
                     Text(loginError, color = Color.Red)

@@ -6,7 +6,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.fitnessapp.database.AppDatabase
-import com.example.fitnessapp.database.User
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
