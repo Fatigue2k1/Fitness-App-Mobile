@@ -1,12 +1,12 @@
 package com.example.fitnessapp.screen.workout_routine_screen
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -20,6 +20,7 @@ import com.example.fitnessapp.database.Workout
 fun WorkoutRoutineScreen(navController: NavHostController) {
     val viewModel: WorkoutRoutineViewModel = viewModel()
     val workouts by viewModel.workouts.observeAsState(emptyList())
+    var showDialog by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -31,6 +32,28 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
                 WorkoutItem(workout)
             }
         }
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.BottomEnd
+        ) {
+            FloatingActionButton(
+                onClick = { showDialog = true },
+                modifier = Modifier.padding(16.dp)
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add Workout")
+            }
+        }
+    }
+
+    if (showDialog) {
+        AddWorkoutDialog(
+            onDismiss = { showDialog = false },
+            onAdd = { name, description ->
+                viewModel.addWorkout(name, description)
+                showDialog = false
+            }
+        )
     }
 }
 
@@ -50,4 +73,40 @@ fun WorkoutItem(workout: Workout) {
             Text(text = workout.description, style = MaterialTheme.typography.bodyMedium)
         }
     }
+}
+
+@Composable
+fun AddWorkoutDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Add Workout") },
+        text = {
+            Column {
+                TextField(
+                    value = name,
+                    onValueChange = { name = it },
+                    label = { Text("Workout Name") }
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    label = { Text("Workout Description") }
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = { onAdd(name, description) }) {
+                Text("Add")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
