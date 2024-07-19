@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "d066f02ee6e13b0cda3fadd892a85030",
+    "identityHash": "7a3ea8ed6b95fe8dec1d943410f27e15",
     "entities": [
       {
         "tableName": "user_table",
@@ -64,7 +64,7 @@
       },
       {
         "tableName": "workout_history_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutName` TEXT NOT NULL, `timestamp` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `workoutName` TEXT NOT NULL, `timestamp` INTEGER NOT NULL, `details` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -83,6 +83,12 @@
             "columnName": "timestamp",
             "affinity": "INTEGER",
             "notNull": true
+          },
+          {
+            "fieldPath": "details",
+            "columnName": "details",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -98,7 +104,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd066f02ee6e13b0cda3fadd892a85030')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7a3ea8ed6b95fe8dec1d943410f27e15')"
     ]
   }
 }

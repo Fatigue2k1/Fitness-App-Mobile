@@ -79,7 +79,8 @@ interface WorkoutDao {
 data class WorkoutHistory(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val workoutName: String,
-    val timestamp: Long
+    val timestamp: Long,
+    val details: String
 )
 
 @Dao

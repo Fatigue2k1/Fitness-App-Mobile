@@ -26,4 +26,11 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             _workoutHistory.postValue(history)
         }
     }
+
+    fun addToHistory(workoutName: String, details: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val history = WorkoutHistory(workoutName = workoutName, timestamp = System.currentTimeMillis(), details = details)
+            workoutHistoryDao.insertWorkoutHistory(history)
+        }
+    }
 }

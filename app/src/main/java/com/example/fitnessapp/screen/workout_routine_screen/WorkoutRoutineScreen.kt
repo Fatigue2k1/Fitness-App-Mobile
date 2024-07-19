@@ -24,6 +24,7 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
     val workouts by viewModel.workouts.observeAsState(emptyList())
     var showDialog by remember { mutableStateOf(false) }
     var selectedWorkout by remember { mutableStateOf<Workout?>(null) }
+    var workoutDetails by remember { mutableStateOf("") }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -32,10 +33,9 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(workouts) { workout ->
-                WorkoutItem(workout,
-                    onDelete = {
-                        viewModel.deleteWorkout(workout)
-                    },
+                WorkoutItem(
+                    workout = workout,
+                    onDelete = { viewModel.deleteWorkout(workout) },
                     onClick = {
                         selectedWorkout = workout
                         showDialog = true
@@ -49,8 +49,8 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
             contentAlignment = Alignment.BottomEnd
         ) {
             FloatingActionButton(
-                onClick = { showDialog = true },
-                modifier = Modifier.padding(16.dp)
+                onClick = { showDialog = true }, // Open AddWorkoutDialog
+                modifier = Modifier.padding(60.dp)
             ) {
                 Icon(Icons.Default.Add, contentDescription = "Add Workout")
             }
@@ -63,9 +63,10 @@ fun WorkoutRoutineScreen(navController: NavHostController) {
                 workout = workout,
                 onDismiss = { showDialog = false },
                 onFinish = {
-                    viewModel.addToHistory(workout.name)
+                    viewModel.addToHistory(workout.name, workoutDetails)
                     showDialog = false
-                }
+                },
+                onDetailsChange = { details -> workoutDetails = details }
             )
         } ?: AddWorkoutDialog(
             onDismiss = { showDialog = false },
@@ -83,12 +84,14 @@ fun WorkoutItem(workout: Workout, onDelete: () -> Unit, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .width(300.dp) // Adjust width as needed
+            .height(65.dp), // Adjust height as needed
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize() // This will make the content fill the card
             .padding(16.dp)) {
             Text(text = workout.name, style = MaterialTheme.typography.titleMedium)
             Spacer(modifier = Modifier.height(8.dp))
@@ -103,6 +106,7 @@ fun WorkoutItem(workout: Workout, onDelete: () -> Unit, onClick: () -> Unit) {
         }
     }
 }
+
 
 @Composable
 fun AddWorkoutDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
@@ -128,7 +132,11 @@ fun AddWorkoutDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
             }
         },
         confirmButton = {
-            TextButton(onClick = { onAdd(name, description) }) {
+            TextButton(onClick = {
+                if (name.isNotBlank() && description.isNotBlank()) {
+                    onAdd(name, description)
+                }
+            }) {
                 Text("Add")
             }
         },
@@ -141,11 +149,31 @@ fun AddWorkoutDialog(onDismiss: () -> Unit, onAdd: (String, String) -> Unit) {
 }
 
 @Composable
-fun WorkoutDialog(workout: Workout, onDismiss: () -> Unit, onFinish: () -> Unit) {
+fun WorkoutDialog(
+    workout: Workout,
+    onDismiss: () -> Unit,
+    onFinish: () -> Unit,
+    onDetailsChange: (String) -> Unit
+) {
+    var details by remember { mutableStateOf("") }
+
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(workout.name) },
-        text = { Text(workout.description) },
+        text = {
+            Column {
+                Text(text = workout.description)
+                Spacer(modifier = Modifier.height(8.dp))
+                TextField(
+                    value = details,
+                    onValueChange = { newDetails ->
+                        details = newDetails
+                        onDetailsChange(newDetails)
+                    },
+                    label = { Text("Details") }
+                )
+            }
+        },
         confirmButton = {
             TextButton(onClick = onFinish) {
                 Text("Finish")

@@ -1,11 +1,11 @@
 package com.example.fitnessapp.screen.history_screen
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +20,8 @@ import java.util.*
 fun HistoryScreen(navController: NavHostController) {
     val viewModel: HistoryViewModel = viewModel()
     val workoutHistory by viewModel.workoutHistory.observeAsState(emptyList())
+    var showDialog by remember { mutableStateOf(false) }
+    var selectedHistory by remember { mutableStateOf<WorkoutHistory?>(null) }
 
     Column(modifier = Modifier
         .fillMaxSize()
@@ -28,18 +30,34 @@ fun HistoryScreen(navController: NavHostController) {
         Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(workoutHistory) { history ->
-                HistoryItem(history)
+                HistoryItem(
+                    workoutHistory = history,
+                    onClick = {
+                        selectedHistory = history
+                        showDialog = true
+                    }
+                )
             }
+        }
+    }
+
+    if (showDialog) {
+        selectedHistory?.let { history ->
+            HistoryDialog(
+                workoutHistory = history,
+                onDismiss = { showDialog = false }
+            )
         }
     }
 }
 
 @Composable
-fun HistoryItem(workoutHistory: WorkoutHistory) {
+fun HistoryItem(workoutHistory: WorkoutHistory, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
@@ -52,4 +70,24 @@ fun HistoryItem(workoutHistory: WorkoutHistory) {
             Text(text = format.format(date), style = MaterialTheme.typography.bodyMedium)
         }
     }
+}
+
+@Composable
+fun HistoryDialog(workoutHistory: WorkoutHistory, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(workoutHistory.workoutName) },
+        text = {
+            Column {
+                Text("Exercises completed:")
+                // Display the exercises or any other details here
+                Text(workoutHistory.details)
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Close")
+            }
+        }
+    )
 }

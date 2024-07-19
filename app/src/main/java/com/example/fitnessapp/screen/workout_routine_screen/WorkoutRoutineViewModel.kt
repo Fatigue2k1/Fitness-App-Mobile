@@ -58,9 +58,9 @@ class WorkoutRoutineViewModel(application: Application) : AndroidViewModel(appli
         }
     }
 
-    fun addToHistory(workoutName: String) {
+    fun addToHistory(workoutName: String, details: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val history = WorkoutHistory(workoutName = workoutName, timestamp = System.currentTimeMillis())
+            val history = WorkoutHistory(workoutName = workoutName, timestamp = System.currentTimeMillis(), details = details)
             workoutHistoryDao.insertWorkoutHistory(history)
         }
     }
