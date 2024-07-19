@@ -2,7 +2,14 @@ package com.example.fitnessapp.screen.welcome_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +32,7 @@ fun WelcomeScreen(navController: NavHostController) {
             .background(Color.Black)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.background), // Replace with your actual background image resource
+            painter = painterResource(id = R.drawable.background),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()

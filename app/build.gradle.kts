@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.gradle.internal.kapt.incremental.UnknownSnapshot
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -71,7 +69,6 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.1")
     implementation("androidx.compose.ui:ui-graphics:1.5.1")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.1")
-//    implementation("androidx.compose.material3:material3:1.1.0")
 
     // Room dependencies
     implementation("androidx.room:room-runtime:2.5.1")
