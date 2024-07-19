@@ -12,10 +12,11 @@ import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [User::class, Workout::class], version = 1)
+@Database(entities = [User::class, Workout::class, WorkoutHistory::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun workoutDao(): WorkoutDao
+    abstract fun workoutHistoryDao(): WorkoutHistoryDao
 
     companion object {
         @Volatile
@@ -27,7 +28,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "fitness_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()  // This is only for development. Handle migrations properly in production.
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -70,4 +73,20 @@ interface WorkoutDao {
 
     @Delete
     fun deleteWorkout(workout: Workout)
+}
+
+@Entity(tableName = "workout_history_table")
+data class WorkoutHistory(
+    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    val workoutName: String,
+    val timestamp: Long
+)
+
+@Dao
+interface WorkoutHistoryDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertWorkoutHistory(workoutHistory: WorkoutHistory)
+
+    @Query("SELECT * FROM workout_history_table")
+    fun getAllWorkoutHistory(): List<WorkoutHistory>
 }

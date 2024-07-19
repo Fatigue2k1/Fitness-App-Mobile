@@ -1,35 +1,29 @@
-//package com.example.fitnessapp.screen.history_screen
-//
-//import androidx.lifecycle.ViewModel
-//import androidx.lifecycle.viewModelScope
-//import com.example.fitnessapp.database.WorkoutHistory
-//import kotlinx.coroutines.flow.MutableStateFlow
-//import kotlinx.coroutines.flow.StateFlow
-//import kotlinx.coroutines.launch
-//
-//class HistoryViewModel : ViewModel() {
-//    private val _history = MutableStateFlow<List<WorkoutHistory>>(emptyList())
-//    val history: StateFlow<List<WorkoutHistory>> = _history
-//
-//    init {
-//        loadHistory()
-//    }
-//
-//    private fun loadHistory() {
-//        viewModelScope.launch {
-//            // Simulate loading data from a repository or database
-//            _history.value = listOf(
-//                WorkoutHistory(
-//                    workoutName = "Push-up",
-//                    date = "2024-07-19",
-//                    notes = "Completed 3 sets of 10 reps"
-//                ),
-//                WorkoutHistory(
-//                    workoutName = "Sit-up",
-//                    date = "2024-07-18",
-//                    notes = "Completed 3 sets of 15 reps"
-//                )
-//            )
-//        }
-//    }
-//}
+package com.example.fitnessapp.screen.history_screen
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.fitnessapp.database.AppDatabase
+import com.example.fitnessapp.database.WorkoutHistory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+class HistoryViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val workoutHistoryDao = AppDatabase.getDatabase(application).workoutHistoryDao()
+    private val _workoutHistory = MutableLiveData<List<WorkoutHistory>>()
+    val workoutHistory: LiveData<List<WorkoutHistory>> get() = _workoutHistory
+
+    init {
+        fetchWorkoutHistory()
+    }
+
+    private fun fetchWorkoutHistory() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val history = workoutHistoryDao.getAllWorkoutHistory()
+            _workoutHistory.postValue(history)
+        }
+    }
+}

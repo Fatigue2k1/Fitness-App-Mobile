@@ -273,7 +273,7 @@ val exercises = listOf(
         type = "Calisthenics"
     ),
     Exercise(
-        name = "Kneeling Ab Wheel Roll-Out",
+        name = "Kneeling Abs Wheel Roll-Out",
         guideline = "Sit with your knees on a soft pad, and place the ab wheel on the floor in front of you.\n" +
                 "Roll out as far as you can, and maintain a straight back throughout the movement.\n" +
                 "Reverse the movement with control, and return to the starting position. ",
