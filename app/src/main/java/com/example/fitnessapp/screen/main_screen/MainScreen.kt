@@ -1,29 +1,70 @@
+package com.example.fitnessapp.screen.main_screen
 
-//
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.material3.Button
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.unit.dp
-//import androidx.navigation.NavHostController
-//
-//@Composable
-//fun MainScreen(navController: NavHostController) {
-//    Column(
-//        modifier = Modifier
-//            .fillMaxSize()
-//            .padding(16.dp),
-//        verticalArrangement = Arrangement.Center,
-//        horizontalAlignment = Alignment.CenterHorizontally
-//    ) {
-//        Text(text = "Welcome to the Workout Routines")
-//        Spacer(modifier = Modifier.height(16.dp))
-//        Button(onClick = {
-//            navController.navigate("workouts")
-//        }) {
-//            Text(text = "View Workout Routines")
-//        }
-//    }
-//}
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.BottomNavigation
+import androidx.compose.material.BottomNavigationItem
+import androidx.compose.material.Icon
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.fitnessapp.R
+import com.example.fitnessapp.screen.exercises_screen.ExercisesScreen
+import com.example.fitnessapp.screen.history_screen.HistoryScreen
+import com.example.fitnessapp.screen.workout_routine_screen.WorkoutRoutineScreen
+
+sealed class MainScreen(val route: String, val icon: Int, val label: String) {
+    object Workout : MainScreen("workout", R.drawable.ic_workout, "Workouts")
+    object Exercises : MainScreen("exercises", R.drawable.ic_exercises, "Exercises")
+    object History : MainScreen("history", R.drawable.ic_history, "History")
+}
+
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
+@Composable
+fun MainScreen(navController: NavHostController) {
+    val navHostController = rememberNavController()
+    val screens = listOf(MainScreen.Workout, MainScreen.Exercises, MainScreen.History)
+    var currentScreen by remember { mutableStateOf<MainScreen>(MainScreen.Workout) }
+
+    Scaffold(
+        bottomBar = {
+            BottomNavigation(
+                backgroundColor = Color.White,
+                contentColor = Color.Gray
+            ) {
+                screens.forEach { screen ->
+                    BottomNavigationItem(
+                        icon = { Icon(painterResource(id = screen.icon), contentDescription = null) },
+                        label = { Text(screen.label) },
+                        selected = currentScreen == screen,
+                        onClick = {
+                            currentScreen = screen
+                            navHostController.navigate(screen.route) {
+                                popUpTo(navHostController.graph.startDestinationId) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        },
+                        selectedContentColor = Color.Blue,
+                        unselectedContentColor = Color.Gray
+                    )
+                }
+            }
+        }
+    ) {
+        NavHost(navController = navHostController, startDestination = MainScreen.Workout.route) {
+            composable(MainScreen.Workout.route) { WorkoutRoutineScreen(navHostController) }
+            composable(MainScreen.Exercises.route) { ExercisesScreen(navHostController) }
+            composable(MainScreen.History.route) { HistoryScreen(navHostController) }
+        }
+    }
+}

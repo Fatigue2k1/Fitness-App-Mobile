@@ -134,7 +134,7 @@ fun LoginScreen(navController: NavHostController) {
                 if (loginSuccessful) {
                     Text("Login successful", color = Color.White)
                     LaunchedEffect(Unit) {
-                        navController.navigate("workout_routine") {
+                        navController.navigate("main") { // Change to "main"
                             popUpTo("login") { inclusive = true }
                         }
                     }

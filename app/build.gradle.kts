@@ -71,11 +71,12 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.1")
     implementation("androidx.compose.ui:ui-graphics:1.5.1")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.1")
-    implementation("androidx.compose.material3:material3:1.1.0")
+//    implementation("androidx.compose.material3:material3:1.1.0")
 
     // Room dependencies
     implementation("androidx.room:room-runtime:2.5.1")
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.androidx.material3.android)
     kapt("androidx.room:room-compiler:2.5.1")
     implementation("androidx.room:room-ktx:2.5.1")
 
@@ -100,6 +101,9 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.5.1")
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.1")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.1")
+
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha10")
+    implementation("androidx.compose.material:material:1.1.0-alpha06")
 }
 
 kapt {

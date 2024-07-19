@@ -10,7 +10,7 @@ import com.example.fitnessapp.screen.forgot_password_screen.ForgotPasswordScreen
 import com.example.fitnessapp.screen.login_screen.LoginScreen
 import com.example.fitnessapp.screen.signup_screen.SignUpScreen
 import com.example.fitnessapp.screen.welcome_screen.WelcomeScreen
-import com.example.fitnessapp.screen.workout_routine_screen.WorkoutRoutineScreen
+import com.example.fitnessapp.screen.main_screen.MainScreen
 
 @Composable
 fun Navigation() {
@@ -21,6 +21,7 @@ fun Navigation() {
         composable("login") { LoginScreen(navController) }
         composable("change_password") { ChangePasswordScreen(navController) }
         composable("forgot_password") { ForgotPasswordScreen(navController) }
-        composable("workout_routine") { WorkoutRoutineScreen(navController) }
+        composable("main") { MainScreen(navController) } // Ensure this route exists
     }
 }
+
