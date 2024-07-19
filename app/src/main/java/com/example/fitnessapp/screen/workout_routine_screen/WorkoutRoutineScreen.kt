@@ -43,7 +43,7 @@
             ) {
                 FloatingActionButton(
                     onClick = { showDialog = true },
-                    modifier = Modifier.padding(16.dp)
+                    modifier = Modifier.padding(60.dp)
                 ) {
                     Icon(Icons.Default.Add, contentDescription = "Add Workout")
                 }
